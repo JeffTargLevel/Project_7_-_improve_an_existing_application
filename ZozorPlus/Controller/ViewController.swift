@@ -13,11 +13,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
     
+    @IBOutlet weak var plusOrMultiplyButton: UIButton!
+    @IBOutlet weak var minusOrDivideButton: UIButton!
+    
     var calculationManager = CalculationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        longPressGestureRecognizerOnPlusOrMultiplyButton()
+        longPressGestureRecognizerOnMinusOrDivideButton()
     }
     
     func setupUI() {
@@ -27,11 +32,11 @@ class ViewController: UIViewController {
     var isExpressionCorrect: Bool {
         if let stringNumber = calculationManager.stringNumbers.last, stringNumber.isEmpty {
             if calculationManager.stringNumbers.count == 1 {
-                    alertControllerWithMessage("Démarrez un nouveau calcul !")
-                } else {
-                   alertControllerWithMessage("Entrez une expression correcte !")
-                }
-                return false
+                alertControllerWithMessage("Démarrez un nouveau calcul !")
+            } else {
+                alertControllerWithMessage("Entrez une expression correcte !")
+            }
+            return false
         }
         return true
     }
@@ -51,6 +56,55 @@ class ViewController: UIViewController {
         }
         return true
     }
+    
+    func longPressGestureRecognizerOnPlusOrMultiplyButton() {
+        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(configurePressPlusOrMultiplyButton(_:)))
+        plusOrMultiplyButton.addGestureRecognizer(longGesture)
+    }
+    
+    func longPressGestureRecognizerOnMinusOrDivideButton() {
+        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(configurePressMinusOrDivideButton(_:)))
+        minusOrDivideButton.addGestureRecognizer(longGesture)
+    }
+    
+    func transformPlusInMultiplyButton(_ sender: UILongPressGestureRecognizer) {
+        plusOrMultiplyButton.isSelected = true
+        if canAddOperator {
+            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("×")
+            calculationManager.updateDisplay(textView)
+        }
+        
+    }
+    
+    func transformMinusInDivideButton(_ sender: UILongPressGestureRecognizer) {
+        minusOrDivideButton.isSelected = true
+        if canAddOperator {
+            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("÷")
+            calculationManager.updateDisplay(textView)
+        }
+    }
+    
+    func configurePressPlusOrMultiplyButton(_ sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .began, .changed:
+            transformPlusInMultiplyButton(sender)
+        case .ended, .cancelled:
+            plusOrMultiplyButton.isSelected = false
+        default:
+            break
+        }
+    }
+    
+    func configurePressMinusOrDivideButton(_ sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .began, .changed:
+            transformMinusInDivideButton(sender)
+        case .ended, .cancelled:
+            minusOrDivideButton.isSelected = false
+        default:
+            break
+        }
+    }
 }
 
 // MARK: - Buttons operations
@@ -67,21 +121,22 @@ extension ViewController {
     
     @IBAction func plus() {
         if canAddOperator {
-            calculationManager.calculateWithPlusOrMinus("+")
+            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("+")
             calculationManager.updateDisplay(textView)
         }
     }
     
     @IBAction func minus() {
         if canAddOperator {
-            calculationManager.calculateWithPlusOrMinus("-")
+            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("-")
             calculationManager.updateDisplay(textView)
         }
     }
     
     @IBAction func equal() {
         if isExpressionCorrect {
-        calculationManager.calculateAndDiplayTotal(total: textView)
+            calculationManager.calculateAndDiplayTotal(total: textView)
         }
     }
 }
+

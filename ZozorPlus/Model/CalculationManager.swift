@@ -23,7 +23,7 @@ class CalculationManager {
         updateDisplay(stringNumber)
     }
     
-    func calculateWithPlusOrMinus(_ sign: String) {
+    func calculateWithPlusOrMinusOrMultiplyOrDivide(_ sign: String) {
         operators.append(sign)
         stringNumbers.append("")
     }
@@ -37,6 +37,10 @@ class CalculationManager {
                     total += number
                 } else if operators[index] == "-" {
                     total -= number
+                } else if operators[index] == "×" {
+                    total *= number
+                } else if operators[index] == "÷" {
+                    total /= number
                 }
             }
         }
