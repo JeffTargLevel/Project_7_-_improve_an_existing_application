@@ -72,7 +72,3 @@ extension CalculationManager {
         index = 0
     }
 }
-
-
-
-
