@@ -28,7 +28,12 @@ class ViewController: UIViewController {
     func setupUI() {
         textView.text = ""
     }
-    
+}
+
+// MARK: - Alerts messages of controller
+
+extension ViewController {
+        
     var isExpressionCorrect: Bool {
         if let stringNumber = calculationManager.stringNumbers.last, stringNumber.isEmpty {
             if calculationManager.stringNumbers.count == 1 {
@@ -56,6 +61,11 @@ class ViewController: UIViewController {
         }
         return true
     }
+}
+
+// MARK: - Configure press signs buttons
+
+extension ViewController {
     
     func longPressGestureRecognizerOnPlusOrMultiplyButton() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(configurePressPlusOrMultiplyButton(_:)))
@@ -86,9 +96,9 @@ class ViewController: UIViewController {
     
     func configurePressPlusOrMultiplyButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
-        case .began, .changed:
+        case .began:
             transformPlusInMultiplyButton(sender)
-        case .ended, .cancelled:
+        case .ended:
             plusOrMultiplyButton.isSelected = false
         default:
             break
@@ -97,9 +107,9 @@ class ViewController: UIViewController {
     
     func configurePressMinusOrDivideButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
-        case .began, .changed:
+        case .began:
             transformMinusInDivideButton(sender)
-        case .ended, .cancelled:
+        case .ended:
             minusOrDivideButton.isSelected = false
         default:
             break
@@ -139,4 +149,5 @@ extension ViewController {
         }
     }
 }
+
 
