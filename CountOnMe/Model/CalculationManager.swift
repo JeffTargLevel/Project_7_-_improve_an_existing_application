@@ -29,10 +29,10 @@ class CalculationManager {
     }
     
     func calculateAndDiplayTotal(total view: UITextView) {
-        var total = 0
+        var total = 0.0
         
         for (index, stringNumber) in stringNumbers.enumerated() {
-            if let number = Int(stringNumber) {
+            if let number = Double(stringNumber) {
                 if operators[index] == "+" {
                     total += number
                 } else if operators[index] == "-" {
