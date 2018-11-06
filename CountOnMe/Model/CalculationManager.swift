@@ -13,6 +13,7 @@ class CalculationManager {
     var stringNumbers: [String] = [String()]
     var operators: [String] = ["+"]
     var index = 0
+    var total = 0.0
     
     func addNewNumberAndDisplay(_ newNumber: Int, _ stringNumber: UITextView) {
         if let stringNumber = stringNumbers.last {
@@ -29,7 +30,7 @@ class CalculationManager {
     }
     
     func calculateAndDiplayTotal(total view: UITextView) {
-        var total = 0.0
+        
         
         for (index, stringNumber) in stringNumbers.enumerated() {
             if let number = Double(stringNumber) {
@@ -70,5 +71,6 @@ extension CalculationManager {
         stringNumbers = [String()]
         operators = ["+"]
         index = 0
+        total = 0.0
     }
 }

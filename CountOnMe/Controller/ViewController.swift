@@ -98,7 +98,7 @@ extension ViewController {
         switch sender.state {
         case .began:
             transformPlusInMultiplyButton(sender)
-        case .ended:
+        case .ended, .cancelled:
             plusOrMultiplyButton.isSelected = false
         default:
             break
@@ -109,7 +109,7 @@ extension ViewController {
         switch sender.state {
         case .began:
             transformMinusInDivideButton(sender)
-        case .ended:
+        case .ended, .cancelled:
             minusOrDivideButton.isSelected = false
         default:
             break
