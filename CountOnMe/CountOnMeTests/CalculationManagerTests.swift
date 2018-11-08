@@ -9,7 +9,7 @@
 import XCTest
 @testable import CountOnMe
 
-class CalculateManagerTests: XCTestCase {
+class CalculationManagerTests: XCTestCase {
 
     var calculationManager: CalculationManager!
     
