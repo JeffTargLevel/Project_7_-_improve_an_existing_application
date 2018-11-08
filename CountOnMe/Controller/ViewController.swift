@@ -33,7 +33,7 @@ class ViewController: UIViewController {
 // MARK: - Alerts messages of controller
 
 extension ViewController {
-        
+    
     var isExpressionCorrect: Bool {
         if let stringNumber = calculationManager.stringNumbers.last, stringNumber.isEmpty {
             if calculationManager.stringNumbers.count == 1 {
@@ -81,7 +81,7 @@ extension ViewController {
         plusOrMultiplyButton.isSelected = true
         if canAddOperator {
             calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("×")
-            calculationManager.updateDisplay(textView)
+            updateDisplay(textView)
         }
         
     }
@@ -90,7 +90,7 @@ extension ViewController {
         minusOrDivideButton.isSelected = true
         if canAddOperator {
             calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("÷")
-            calculationManager.updateDisplay(textView)
+            updateDisplay(textView)
         }
     }
     
@@ -117,6 +117,36 @@ extension ViewController {
     }
 }
 
+// MARK: - Update, total and clear display
+
+extension ViewController {
+    
+    func updateDisplay(_ textView: UITextView) {
+        var text = String()
+        
+        for (index, stringNumber) in calculationManager.stringNumbers.enumerated() {
+            // Add operator
+            if index > 0 {
+                text += calculationManager.operators[index]
+            }
+            // Add number
+            text += stringNumber
+        }
+        textView.text = text
+    }
+    
+    func displayTotal(_ view: UITextView) {
+        view.text += "=\(calculationManager.total)"
+    }
+    
+    func clearDisplay() {
+        calculationManager.stringNumbers = [String()]
+        calculationManager.operators = ["+"]
+        calculationManager.index = 0
+        calculationManager.total = 0.0
+    }
+}
+
 // MARK: - Buttons operations
 
 extension ViewController {
@@ -124,7 +154,8 @@ extension ViewController {
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         for (i, numberButton) in numberButtons.enumerated() {
             if sender == numberButton {
-                calculationManager.addNewNumberAndDisplay(i, textView)
+                calculationManager.addNewNumber(i)
+                updateDisplay(textView)
             }
         }
     }
@@ -132,20 +163,23 @@ extension ViewController {
     @IBAction func plus() {
         if canAddOperator {
             calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("+")
-            calculationManager.updateDisplay(textView)
+            updateDisplay(textView)
         }
     }
     
     @IBAction func minus() {
         if canAddOperator {
             calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("-")
-            calculationManager.updateDisplay(textView)
+            updateDisplay(textView)
         }
     }
     
     @IBAction func equal() {
         if isExpressionCorrect {
-            calculationManager.calculateAndDiplayTotal(total: textView)
+            calculationManager.calculateTotal()
+            displayTotal(textView)
+            clearDisplay()
         }
     }
 }
+

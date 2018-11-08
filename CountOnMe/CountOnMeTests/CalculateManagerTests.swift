@@ -19,10 +19,10 @@ class CalculateManagerTests: XCTestCase {
     }
     
     private func doTheFollowingCalculation(_ number1: Int, _ sign: String, _ number2: Int) {
-        calculationManager.addNewNumberAndDisplay(number1, UITextView())
+        calculationManager.addNewNumber(number1)
         calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide(sign)
-        calculationManager.addNewNumberAndDisplay(number2, UITextView())
-        calculationManager.calculateAndDiplayTotal(total: UITextView())
+        calculationManager.addNewNumber(number2)
+        calculationManager.calculateTotal()
     }
     
     func testGivenToDoThreePlusThree_WhenUseSignPlus_ThenTheResultIsSix() {

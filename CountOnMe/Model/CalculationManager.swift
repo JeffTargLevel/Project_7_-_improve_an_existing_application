@@ -15,13 +15,12 @@ class CalculationManager {
     var index = 0
     var total = 0.0
     
-    func addNewNumberAndDisplay(_ newNumber: Int, _ stringNumber: UITextView) {
+    func addNewNumber(_ newNumber: Int) {
         if let stringNumber = stringNumbers.last {
             var stringNumberMutable = stringNumber
             stringNumberMutable += "\(newNumber)"
             stringNumbers[stringNumbers.count-1] = stringNumberMutable
         }
-        updateDisplay(stringNumber)
     }
     
     func calculateWithPlusOrMinusOrMultiplyOrDivide(_ sign: String) {
@@ -29,9 +28,8 @@ class CalculationManager {
         stringNumbers.append("")
     }
     
-    func calculateAndDiplayTotal(total view: UITextView) {
-        
-        
+    func calculateTotal() {
+       
         for (index, stringNumber) in stringNumbers.enumerated() {
             if let number = Double(stringNumber) {
                 if operators[index] == "+" {
@@ -45,32 +43,7 @@ class CalculationManager {
                 }
             }
         }
-        view.text += "=\(total)"
-        clearDisplay()
     }
 }
 
-// MARK: - Update and clear display
 
-extension CalculationManager {
-    
-    func updateDisplay(_ textView: UITextView) {
-        var text = String()
-        for (index, stringNumber) in stringNumbers.enumerated() {
-            // Add operator
-            if index > 0 {
-                text += operators[index]
-            }
-            // Add number
-            text += stringNumber
-        }
-        textView.text = text
-    }
-    
-    func clearDisplay() {
-        stringNumbers = [String()]
-        operators = ["+"]
-        index = 0
-        total = 0.0
-    }
-}
