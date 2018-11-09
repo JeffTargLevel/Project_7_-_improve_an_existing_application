@@ -62,7 +62,7 @@ extension ViewController {
         return true
     }
     
-    var IsNotDivideZero: Bool {
+    var IsNotDivideByZero: Bool {
         if calculationManager.total == .infinity {
             alertControllerWithMessage("Erreur")
             return true
@@ -144,7 +144,7 @@ extension ViewController {
     }
     
     func displayTotal(_ view: UITextView) {
-        if !IsNotDivideZero {
+        if !IsNotDivideByZero {
             view.text += "=\(calculationManager.total)"
         }
     }
@@ -161,9 +161,9 @@ extension ViewController {
 extension ViewController {
     
     @IBAction func tappedNumberButton(_ sender: UIButton) {
-        for (i, numberButton) in numberButtons.enumerated() {
+        for (indexNumber, numberButton) in numberButtons.enumerated() {
             if sender == numberButton {
-                calculationManager.addNewNumber(i)
+                calculationManager.addNewNumber(indexNumber)
                 updateDisplay(textView)
             }
         }

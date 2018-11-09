@@ -25,27 +25,33 @@ class CalculationManagerTests: XCTestCase {
         calculationManager.calculateTotal()
     }
     
-    func testGivenToDoThreePlusThree_WhenUseSignPlus_ThenTheResultIsSix() {
+    func testGivenToDoThreePlusThree_WhenUsePlusSign_ThenTheResultIsSix() {
         doTheFollowingCalculation(3, "+", 3)
         
         XCTAssertEqual(calculationManager.total, 6)
     }
     
-    func testGivenToDoSixMinusSix_WhenUseSignMinus_ThenTheResultIsZero() {
+    func testGivenToDoSixMinusSix_WhenUseMinusSign_ThenTheResultIsZero() {
         doTheFollowingCalculation(6, "-", 6)
         
         XCTAssertEqual(calculationManager.total, 0)
     }
     
-    func testGivenToDoTenMultiplyTwo_WhenUseSignMultiply_ThenTheResultIsTwenties() {
+    func testGivenToDoTenMultiplyTwo_WhenUseMultiplySign_ThenTheResultIsTwenties() {
         doTheFollowingCalculation(10, "×", 2)
         
         XCTAssertEqual(calculationManager.total, 20)
     }
     
-    func testGivenToDoTwelveDivideThree_WhenUseSignDivide_ThenTheResultIsFour() {
+    func testGivenToDoTwelveDivideByThree_WhenUseDivideSign_ThenTheResultIsFour() {
         doTheFollowingCalculation(12, "÷", 3)
         
         XCTAssertEqual(calculationManager.total, 4)
+    }
+    
+    func testGivenToDoSevenDivideByZero_WhenUseDivideSign_ThenTheResultIsInfinity() {
+        doTheFollowingCalculation(7, "÷", 0)
+        
+        XCTAssertEqual(calculationManager.total, .infinity)
     }
 }
