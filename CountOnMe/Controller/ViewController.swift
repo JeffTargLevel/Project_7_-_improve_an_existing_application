@@ -61,6 +61,14 @@ extension ViewController {
         }
         return true
     }
+    
+    var IsNotDivideZero: Bool {
+        if calculationManager.total == .infinity {
+            alertControllerWithMessage("Erreur")
+            return true
+        }
+        return false
+    }
 }
 
 // MARK: - Configure press signs buttons
@@ -136,13 +144,14 @@ extension ViewController {
     }
     
     func displayTotal(_ view: UITextView) {
-        view.text += "=\(calculationManager.total)"
+        if !IsNotDivideZero {
+            view.text += "=\(calculationManager.total)"
+        }
     }
     
     func clearDisplay() {
         calculationManager.stringNumbers = [String()]
         calculationManager.operators = ["+"]
-        calculationManager.index = 0
         calculationManager.total = 0.0
     }
 }
@@ -182,4 +191,5 @@ extension ViewController {
         }
     }
 }
+
 

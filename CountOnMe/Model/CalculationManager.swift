@@ -12,7 +12,6 @@ import UIKit
 class CalculationManager {
     var stringNumbers: [String] = [String()]
     var operators: [String] = ["+"]
-    var index = 0
     var total = 0.0
     
     func addNewNumber(_ newNumber: Int) {
