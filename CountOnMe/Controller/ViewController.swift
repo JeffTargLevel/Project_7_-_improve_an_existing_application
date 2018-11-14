@@ -85,19 +85,11 @@ extension ViewController {
         minusOrDivideButton.addGestureRecognizer(longGesture)
     }
     
-    func transformPlusInMultiplyButton(_ sender: UILongPressGestureRecognizer) {
-        plusOrMultiplyButton.isSelected = true
-        if canAddOperator {
-            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("×")
-            updateDisplay(textView)
-        }
-        
-    }
     
-    func transformMinusInDivideButton(_ sender: UILongPressGestureRecognizer) {
-        minusOrDivideButton.isSelected = true
+    func transformButtonSign(_ sender: UILongPressGestureRecognizer, _ button: UIButton, _ sign: String) {
+        button.isSelected = true
         if canAddOperator {
-            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("÷")
+            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide(sign)
             updateDisplay(textView)
         }
     }
@@ -105,7 +97,7 @@ extension ViewController {
     func configurePressPlusOrMultiplyButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
-            transformPlusInMultiplyButton(sender)
+            transformButtonSign(sender, plusOrMultiplyButton, "×")
         case .ended, .cancelled:
             plusOrMultiplyButton.isSelected = false
         default:
@@ -116,7 +108,7 @@ extension ViewController {
     func configurePressMinusOrDivideButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
-            transformMinusInDivideButton(sender)
+            transformButtonSign(sender, minusOrDivideButton, "÷")
         case .ended, .cancelled:
             minusOrDivideButton.isSelected = false
         default:
@@ -191,5 +183,6 @@ extension ViewController {
         }
     }
 }
+
 
 
