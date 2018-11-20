@@ -85,7 +85,6 @@ extension ViewController {
         minusOrDivideButton.addGestureRecognizer(longGesture)
     }
     
-    
     func transformButtonSign(_ sender: UILongPressGestureRecognizer, _ button: UIButton, _ sign: String) {
         button.isSelected = true
         if canAddOperator {
@@ -94,7 +93,7 @@ extension ViewController {
         }
     }
     
-    func configurePressPlusOrMultiplyButton(_ sender: UILongPressGestureRecognizer) {
+    @objc func configurePressPlusOrMultiplyButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             transformButtonSign(sender, plusOrMultiplyButton, "×")
@@ -105,7 +104,7 @@ extension ViewController {
         }
     }
     
-    func configurePressMinusOrDivideButton(_ sender: UILongPressGestureRecognizer) {
+    @objc func configurePressMinusOrDivideButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             transformButtonSign(sender, minusOrDivideButton, "÷")
@@ -183,6 +182,3 @@ extension ViewController {
         }
     }
 }
-
-
-
