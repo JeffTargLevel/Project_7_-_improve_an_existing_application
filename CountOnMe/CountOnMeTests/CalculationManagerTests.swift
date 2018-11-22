@@ -53,5 +53,6 @@ class CalculationManagerTests: XCTestCase {
         doTheFollowingCalculation(7, "÷", 0)
         
         XCTAssertEqual(calculationManager.total, .infinity)
+        XCTAssertEqual(calculationManager.IsNotDivideByZero, true)
     }
 }

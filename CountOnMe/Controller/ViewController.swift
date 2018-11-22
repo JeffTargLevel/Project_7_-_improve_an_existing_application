@@ -10,13 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var textView: UITextView!
-    @IBOutlet var numberButtons: [UIButton]!
+    @IBOutlet weak private var textView: UITextView!
+    @IBOutlet private var numberButtons: [UIButton]!
     
-    @IBOutlet weak var plusOrMultiplyButton: UIButton!
-    @IBOutlet weak var minusOrDivideButton: UIButton!
+    @IBOutlet weak private var plusOrMultiplyButton: UIButton!
+    @IBOutlet weak private var minusOrDivideButton: UIButton!
     
-    var calculationManager = CalculationManager()
+    private var calculationManager = CalculationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         longPressGestureRecognizerOnMinusOrDivideButton()
     }
     
-    func setupUI() {
+    private func setupUI() {
         textView.text = ""
     }
 }
@@ -34,7 +34,13 @@ class ViewController: UIViewController {
 
 extension ViewController {
     
-    var isExpressionCorrect: Bool {
+    private func alertControllerWithMessage(_ message: String) {
+        let alertVC = UIAlertController(title: "Zéro!", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alertVC, animated: true, completion: nil)
+    }
+    
+    private var isExpressionCorrect: Bool {
         if let stringNumber = calculationManager.stringNumbers.last, stringNumber.isEmpty {
             if calculationManager.stringNumbers.count == 1 {
                 alertControllerWithMessage("Démarrez un nouveau calcul !")
@@ -45,55 +51,28 @@ extension ViewController {
         }
         return true
     }
-    
-    func alertControllerWithMessage(_ message: String) {
-        let alertVC = UIAlertController(title: "Zéro!", message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        self.present(alertVC, animated: true, completion: nil)
-    }
-    
-    var canAddOperator: Bool {
-        if let stringNumber = calculationManager.stringNumbers.last {
-            if stringNumber.isEmpty {
-                alertControllerWithMessage("expression incorrecte !")
-                return false
-            }
-        }
-        return true
-    }
-    
-    var IsNotDivideByZero: Bool {
-        if calculationManager.total == .infinity {
-            alertControllerWithMessage("Erreur")
-            return true
-        }
-        return false
-    }
 }
 
 // MARK: - Configure press signs buttons
 
 extension ViewController {
     
-    func longPressGestureRecognizerOnPlusOrMultiplyButton() {
+    private func longPressGestureRecognizerOnPlusOrMultiplyButton() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(configurePressPlusOrMultiplyButton(_:)))
         plusOrMultiplyButton.addGestureRecognizer(longGesture)
     }
     
-    func longPressGestureRecognizerOnMinusOrDivideButton() {
+    private func longPressGestureRecognizerOnMinusOrDivideButton() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(configurePressMinusOrDivideButton(_:)))
         minusOrDivideButton.addGestureRecognizer(longGesture)
     }
     
-    func transformButtonSign(_ sender: UILongPressGestureRecognizer, _ button: UIButton, _ sign: String) {
+    private func transformButtonSign(_ sender: UILongPressGestureRecognizer, _ button: UIButton, _ sign: String) {
         button.isSelected = true
-        if canAddOperator {
-            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide(sign)
-            updateDisplay(textView)
-        }
+        addOperator(sign)
     }
     
-    @objc func configurePressPlusOrMultiplyButton(_ sender: UILongPressGestureRecognizer) {
+    @objc private func configurePressPlusOrMultiplyButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             transformButtonSign(sender, plusOrMultiplyButton, "×")
@@ -104,7 +83,7 @@ extension ViewController {
         }
     }
     
-    @objc func configurePressMinusOrDivideButton(_ sender: UILongPressGestureRecognizer) {
+    @objc private func configurePressMinusOrDivideButton(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             transformButtonSign(sender, minusOrDivideButton, "÷")
@@ -116,11 +95,33 @@ extension ViewController {
     }
 }
 
+//MARK: - Add operator and prepare for result
+
+extension ViewController {
+    
+    private func addOperator(_ sign: String) {
+        if calculationManager.canAddOperator {
+            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide(sign)
+            updateDisplay(textView)
+        } else {
+            alertControllerWithMessage("Expression incorrecte !")
+        }
+    }
+    
+    private func readyForResult() {
+        if isExpressionCorrect {
+            calculationManager.calculateTotal()
+            displayTotal(textView)
+            clearDisplay()
+        }
+    }
+}
+
 // MARK: - Update, total and clear display
 
 extension ViewController {
     
-    func updateDisplay(_ textView: UITextView) {
+    private func updateDisplay(_ textView: UITextView) {
         var text = String()
         
         for (index, stringNumber) in calculationManager.stringNumbers.enumerated() {
@@ -134,13 +135,15 @@ extension ViewController {
         textView.text = text
     }
     
-    func displayTotal(_ view: UITextView) {
-        if !IsNotDivideByZero {
+    private func displayTotal(_ view: UITextView) {
+        if !calculationManager.IsNotDivideByZero {
             view.text += "=\(calculationManager.total)"
+        } else {
+            alertControllerWithMessage("Erreur")
         }
     }
     
-    func clearDisplay() {
+    private func clearDisplay() {
         calculationManager.stringNumbers = [String()]
         calculationManager.operators = ["+"]
         calculationManager.total = 0.0
@@ -161,24 +164,18 @@ extension ViewController {
     }
     
     @IBAction func plus() {
-        if canAddOperator {
-            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("+")
-            updateDisplay(textView)
-        }
+        addOperator("+")
     }
     
     @IBAction func minus() {
-        if canAddOperator {
-            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide("-")
-            updateDisplay(textView)
-        }
+        addOperator("-")
     }
     
     @IBAction func equal() {
-        if isExpressionCorrect {
-            calculationManager.calculateTotal()
-            displayTotal(textView)
-            clearDisplay()
-        }
+        readyForResult()
     }
 }
+
+
+
+

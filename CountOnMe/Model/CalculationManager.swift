@@ -14,6 +14,28 @@ class CalculationManager {
     var operators: [String] = ["+"]
     var total = 0.0
     
+}
+
+//MARK: - Be able to add an operator and check the division by zero
+
+extension CalculationManager {
+    
+    var canAddOperator: Bool {
+        if let stringNumber = stringNumbers.last, stringNumber.isEmpty {
+            return false
+        }
+        return true
+    }
+    
+    var IsNotDivideByZero: Bool {
+        return total == .infinity
+    }
+}
+
+//MARK: - Calculation
+
+extension CalculationManager {
+    
     func addNewNumber(_ newNumber: Int) {
         if let stringNumber = stringNumbers.last {
             var stringNumberMutable = stringNumber
@@ -28,7 +50,7 @@ class CalculationManager {
     }
     
     func calculateTotal() {
-       
+        
         for (index, stringNumber) in stringNumbers.enumerated() {
             if let number = Double(stringNumber) {
                 if operators[index] == "+" {
@@ -44,3 +66,5 @@ class CalculationManager {
         }
     }
 }
+
+
