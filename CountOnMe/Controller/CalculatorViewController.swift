@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
     
     @IBOutlet weak private var textView: UITextView!
     @IBOutlet private var numberButtons: [UIButton]!
@@ -30,32 +30,20 @@ class ViewController: UIViewController {
     }
 }
 
-// MARK: - Alerts messages of controller
+// MARK: - Configure alertController
 
-extension ViewController {
+extension CalculatorViewController {
     
     private func alertControllerWithMessage(_ message: String) {
         let alertVC = UIAlertController(title: "Zéro!", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(alertVC, animated: true, completion: nil)
     }
-    
-    private var isExpressionCorrect: Bool {
-        if let stringNumber = calculationManager.stringNumbers.last, stringNumber.isEmpty {
-            if calculationManager.stringNumbers.count == 1 {
-                alertControllerWithMessage("Démarrez un nouveau calcul !")
-            } else {
-                alertControllerWithMessage("Entrez une expression correcte !")
-            }
-            return false
-        }
-        return true
-    }
 }
 
 // MARK: - Configure press signs buttons
 
-extension ViewController {
+extension CalculatorViewController {
     
     private func longPressGestureRecognizerOnPlusOrMultiplyButton() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(configurePressPlusOrMultiplyButton(_:)))
@@ -95,9 +83,18 @@ extension ViewController {
     }
 }
 
-//MARK: - Add operator and prepare for result
+//MARK: - Select number, add operator and prepare for result
 
-extension ViewController {
+extension CalculatorViewController {
+    
+    private func selectNumber(_ sender: UIButton) {
+        for (indexNumber, numberButton) in numberButtons.enumerated() {
+            if sender == numberButton {
+                calculationManager.addNewNumber(indexNumber)
+                updateDisplay(textView)
+            }
+        }
+    }
     
     private func addOperator(_ sign: String) {
         if calculationManager.canAddOperator {
@@ -108,8 +105,20 @@ extension ViewController {
         }
     }
     
+    private var isReadyForOperation: Bool {
+        if let stringNumber = calculationManager.stringNumbers.last, stringNumber.isEmpty {
+            if calculationManager.stringNumbers.count == 1 {
+                alertControllerWithMessage("Démarrez un nouveau calcul !")
+            } else {
+                alertControllerWithMessage("Entrez une expression correcte !")
+            }
+            return false
+        }
+        return true
+    }
+    
     private func readyForResult() {
-        if isExpressionCorrect {
+        if isReadyForOperation {
             calculationManager.calculateTotal()
             displayTotal(textView)
             clearDisplay()
@@ -119,7 +128,7 @@ extension ViewController {
 
 // MARK: - Update, total and clear display
 
-extension ViewController {
+extension CalculatorViewController {
     
     private func updateDisplay(_ textView: UITextView) {
         var text = String()
@@ -152,15 +161,10 @@ extension ViewController {
 
 // MARK: - Buttons operations
 
-extension ViewController {
+extension CalculatorViewController {
     
     @IBAction func tappedNumberButton(_ sender: UIButton) {
-        for (indexNumber, numberButton) in numberButtons.enumerated() {
-            if sender == numberButton {
-                calculationManager.addNewNumber(indexNumber)
-                updateDisplay(textView)
-            }
-        }
+        selectNumber(sender)
     }
     
     @IBAction func plus() {
@@ -175,7 +179,3 @@ extension ViewController {
         readyForResult()
     }
 }
-
-
-
-

@@ -13,7 +13,6 @@ class CalculationManager {
     var stringNumbers: [String] = [String()]
     var operators: [String] = ["+"]
     var total = 0.0
-    
 }
 
 //MARK: - Be able to add an operator and check the division by zero
