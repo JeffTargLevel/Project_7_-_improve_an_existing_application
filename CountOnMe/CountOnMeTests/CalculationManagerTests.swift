@@ -10,7 +10,7 @@ import XCTest
 @testable import CountOnMe
 
 class CalculationManagerTests: XCTestCase {
-
+    
     var calculationManager: CalculationManager!
     
     override func setUp() {
@@ -20,7 +20,9 @@ class CalculationManagerTests: XCTestCase {
     
     private func doTheFollowingCalculation(_ number1: Int, _ sign: String, _ number2: Int) {
         calculationManager.addNewNumber(number1)
-        calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide(sign)
+        if calculationManager.canAddOperator {
+            calculationManager.calculateWithPlusOrMinusOrMultiplyOrDivide(sign)
+        }
         calculationManager.addNewNumber(number2)
         calculationManager.calculateTotal()
     }
@@ -56,3 +58,4 @@ class CalculationManagerTests: XCTestCase {
         XCTAssertEqual(calculationManager.IsNotDivideByZero, true)
     }
 }
+
