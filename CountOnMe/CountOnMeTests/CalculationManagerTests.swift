@@ -58,4 +58,3 @@ class CalculationManagerTests: XCTestCase {
         XCTAssertEqual(calculationManager.IsNotDivideByZero, true)
     }
 }
-

@@ -55,8 +55,14 @@ extension CalculatorViewController {
         minusOrDivideButton.addGestureRecognizer(longGesture)
     }
     
+    private func changeColorButton(_ button: UIButton, _ color: UIColor) {
+        button.backgroundColor = color
+        button.tintColor = color
+    }
+    
     private func transformButtonSign(_ sender: UILongPressGestureRecognizer, _ button: UIButton, _ sign: String) {
         button.isSelected = true
+        changeColorButton(button, #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1))
         addOperator(sign)
     }
     
@@ -66,6 +72,7 @@ extension CalculatorViewController {
             transformButtonSign(sender, plusOrMultiplyButton, "×")
         case .ended, .cancelled:
             plusOrMultiplyButton.isSelected = false
+            changeColorButton(plusOrMultiplyButton, #colorLiteral(red: 0.4705882353, green: 0.7137254902, blue: 0.6235294118, alpha: 1))
         default:
             break
         }
@@ -77,6 +84,7 @@ extension CalculatorViewController {
             transformButtonSign(sender, minusOrDivideButton, "÷")
         case .ended, .cancelled:
             minusOrDivideButton.isSelected = false
+            changeColorButton(minusOrDivideButton, #colorLiteral(red: 0.8745098039, green: 0.3725490196, blue: 0.3254901961, alpha: 1))
         default:
             break
         }
